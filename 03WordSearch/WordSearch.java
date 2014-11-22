@@ -32,28 +32,47 @@ public class WordSearch {
     public void add() {
 	while(true){
 	    int i = r.nextInt(words.length);
+	    int x = xRange(words[i]);
+	    int y = yRange(words[i]);
 	    if (2*words[i].length()>width+length) {
 		continue;
 	    }
 	    if(words[i].length()>length && words[i].length()<=width){
-		horizontal(words[i],r.nextInt(length),xRange(words[i]));
-		continue;
-	    }
-	    if(words[i].length()>width && words[i].length()<=length){
-		vertical(words[i],yRange(words[i]),r.nextInt(width));
-		continue;
-	    }
+		y=r.nextInt(length);
+		if(!(fit(words[i],y,x,0))){
+		    continue;
+		}
+		horizontal(words[i],y,x);
+	    } else if(words[i].length()>width && words[i].length()<=length){
+		x=r.nextInt(width);
+		if(!(fit(words[i],y,x,1))){
+		    continue;
+		}
+		vertical(words[i],y,x);
+	    } else {
 	    int a = r.nextInt(3);
 	    if (a==0){
-		horizontal(words[i],r.nextInt(length),xRange(words[i]));
+		y=r.nextInt(length);
+		if(!(fit(words[i],y,x,0))){
+		    continue;
+		}
+		horizontal(words[i],y,x);
 	    } else if (a==1){
-		vertical(words[i],yRange(words[i]),r.nextInt(width));
+		x=r.nextInt(width);
+		if(!(fit(words[i],y,x,1))){
+		    continue;
+		}
+		vertical(words[i],y,x);
 	    } else if (a==2){
-		diagonal(words[i],yRange(words[i]),xRange(words[i]));
+		if(!(fit(words[i],y,x,2))){
+		    continue;
+		}
+		diagonal(words[i],y,x);
+	    }
+	    
 	    }
 	}
     }
-    
     private int xRange(String s){
 	return r.nextInt(width-s.length()+1);
     }
@@ -61,7 +80,28 @@ public class WordSearch {
 	return r.nextInt(length-s.length()+1);
     }
 
-    public void vertical(String s, int rows, int cols){}	
+    private boolean fit(String s, int y, int x, int d){
+	for(int i=0;i<s.length();i++){
+	    if(d==0){
+		if(grid[y][x+i]!=' ' || grid[y][x+i]!=s.charAt(i)){
+		    return false;
+		}
+	    } else if(d==1){
+		if(grid[y+i][x]!=' ' || grid[y+i][x]!=s.charAt(i)){
+		    return false;
+		}
+	    } else {
+		if(grid[y+i][x+i]!=' ' || grid[y+i][x+i]!=s.charAt(i)){
+		    return false;
+		}
+	    }
+	}
+	return true;
+    }
+	
+    public void vertical(String s, int rows, int cols){
+	
+    }	
     
     public void horizontal(String s, int rows, int cols){}
     
