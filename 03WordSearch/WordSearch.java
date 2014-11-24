@@ -1,45 +1,18 @@
 import java.util.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class WordSearch {
     private char[][] grid;
     private int width,length;
-    private String[] words;
+    static String[] words = {"abc","ebd"};
     private char[] concatenated;
     private Random r;
-    private int picked;
 
     public WordSearch(int rows, int cols) {
 	grid = new char[rows][cols];
 	length = rows;
 	width = cols;
 	r = new Random();
-	read();
 	clear();
-	
-    }
-
-    public void read(){
-	try {
-	    File text = new File("list.txt");
-	    Scanner scan = new Scanner(text);
-	    int i=0;
-	    while(scan.hasNextLine()){
-		scan.nextLine();
-		i++;
-	    }
-	    System.out.println(i);
-	    scan = new Scanner(text);
-	    words = new String[i];
-	    i=0;
-	    while(scan.hasNextLine()){
-		words[i]=scan.nextLine().toUpperCase();
-		i++;
-	    }
-	} catch (FileNotFoundException e) {
-	    System.out.println("some exception");
-	}
     }
 
     public void clear() {
@@ -55,30 +28,21 @@ public class WordSearch {
 	    concatenated[i] = s.charAt(i);
 	}
     }
-    
-    public void pick(){
-	int j = words.length-picked-1;
-	int i = r.nextInt(j+1);
-	String s = words[j];
-	words[j]=words[i];
-	words[i]=s;
-	picked++;
-    }
 
     public void add(int numberWords) {
 	int limit = 0;
 	int number = 0;
 	while(numberWords>number && limit <=100){
-	    pick();
-	    int i = words.length-picked;
+	    int i = r.nextInt(words.length);
 	    int x = xRange(words[i]);
 	    int y = yRange(words[i]);
 	    int c = r.nextInt(2);
-	    if (2*words[i].length()>width+length) {  //word is too big
+	    if (2*words[i].length()>width+length) {
+		System.out.println("0");
 		limit++;
 		continue;
 	    }
-	    if(words[i].length()>length && words[i].length()<=width){ // word is longer than the height
+	    if(words[i].length()>length && words[i].length()<=width){
 		y=r.nextInt(length);
 		if(!(fit(words[i],y,x,0,c))){
 		    //System.out.println("1");
@@ -86,7 +50,7 @@ public class WordSearch {
 		    continue;
 		}
 		horizontal(words[i],y,x,c);
-	    } else if(words[i].length()>width && words[i].length()<=length){  // word is longer than the width
+	    } else if(words[i].length()>width && words[i].length()<=length){
 		x=r.nextInt(width);
 		if(!(fit(words[i],y,x,1,c))){
 		    //System.out.println("2");
@@ -94,7 +58,7 @@ public class WordSearch {
 		    continue;
 		}
 		vertical(words[i],y,x,c);
-	    } else { // word can be diagonal, horizontal, vertical
+	    } else {
 		int a = r.nextInt(3);
 		if (a==0){
 		    y=r.nextInt(length);
@@ -141,17 +105,13 @@ public class WordSearch {
 	if(j==0){
 	    y=length-y-1;
 	    x=length-x-1;
-	    if(d==0)
-		y=(y+1-length)*-1;
-	    if(d==1)
-		x=(x+1-length)*-1;
 	    j=-1;
 	}
 	for(int i=0;i<s.length();i++){
 	    if(d==0){
-		if(grid[y][x+i*j]!=' '){
+		/*if(grid[y][x+i*j]!=' '){
 		    System.out.println(s.charAt(i)+","+grid[y][x+i*j]+","+(grid[y][x+i*j]!=' ' && grid[y][x+i*j]!=s.charAt(i)));
-		    }
+		    }*/
 		
 		if(grid[y][x+i*j]!=' ' && grid[y][x+i*j]!=s.charAt(i)){
 		    return false;
@@ -213,8 +173,8 @@ public class WordSearch {
     }
 
     public static void main(String[]df) {
-	WordSearch map =  new WordSearch(20,20);
-	map.add(10);
+	WordSearch map =  new WordSearch(3,3);
+	map.add(2);
 	System.out.println(map.toString());
     }
 }
