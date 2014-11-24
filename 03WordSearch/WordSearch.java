@@ -29,7 +29,6 @@ public class WordSearch {
 		scan.nextLine();
 		i++;
 	    }
-	    System.out.println(i);
 	    scan = new Scanner(text);
 	    words = new String[i];
 	    i=0;
@@ -38,7 +37,7 @@ public class WordSearch {
 		i++;
 	    }
 	} catch (FileNotFoundException e) {
-	    System.out.println("some exception");
+	    System.out.println("file not found");
 	}
     }
 
@@ -59,6 +58,7 @@ public class WordSearch {
     public void pick(){
 	int j = words.length-picked-1;
 	int i = r.nextInt(j+1);
+	System.out.println(words[i]);
 	String s = words[j];
 	words[j]=words[i];
 	words[i]=s;
@@ -68,7 +68,7 @@ public class WordSearch {
     public void add(int numberWords) {
 	int limit = 0;
 	int number = 0;
-	while(numberWords>number && limit <=100){
+	while(numberWords>number && limit <=200){
 	    pick();
 	    int i = words.length-picked;
 	    int x = xRange(words[i]);
@@ -124,10 +124,9 @@ public class WordSearch {
 	    }
 	    number++;
 	    limit++;
-	    System.out.println(this.toString());
 	}
 	if(limit>=200){
-	    System.out.println(limit+" "+"limit reached");
+	    throw new RuntimeException("this while loop ran pretty long");
 	}
     }
     private int xRange(String s){
@@ -149,9 +148,9 @@ public class WordSearch {
 	}
 	for(int i=0;i<s.length();i++){
 	    if(d==0){
-		if(grid[y][x+i*j]!=' '){
+		/**if(grid[y][x+i*j]!=' '){
 		    System.out.println(s.charAt(i)+","+grid[y][x+i*j]+","+(grid[y][x+i*j]!=' ' && grid[y][x+i*j]!=s.charAt(i)));
-		    }
+		    }**/
 		
 		if(grid[y][x+i*j]!=' ' && grid[y][x+i*j]!=s.charAt(i)){
 		    return false;
@@ -198,7 +197,17 @@ public class WordSearch {
 	for(int i=0;i<s.length();i++){
 	    grid[rows+i*j][cols+i*j]=s.charAt(i);
 	}
-}
+    }
+    
+    public void obfuscate(){
+	String abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	for (int i=0;i<length;i++) {
+	    for (int j=0;j<width;j++) {
+		if(grid[i][j]==' ')
+		    grid[i][j] = abc.charAt(r.nextInt(abc.length()));
+	    }
+	}
+    }
 
     public String toString() {
 	String s = "";
@@ -215,6 +224,7 @@ public class WordSearch {
     public static void main(String[]df) {
 	WordSearch map =  new WordSearch(20,20);
 	map.add(10);
+	map.obfuscate();
 	System.out.println(map.toString());
     }
 }
