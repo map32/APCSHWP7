@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.ArrayIndexOutOfBoundsException;
 
 public class WordSearch {
     private char[][] grid;
@@ -65,68 +66,26 @@ public class WordSearch {
 	picked++;
     }
 
-    public void add(int numberWords) {
+    public void add() {
 	int limit = 0;
 	int number = 0;
-	while(numberWords>number && limit <=200){
-	    pick();
-	    int i = words.length-picked;
-	    int x = xRange(words[i]);
-	    int y = yRange(words[i]);
-	    int c = r.nextInt(2);
+	int[] yx = new int[2];
+	int[] dydx = new int[2];
+	while(limit<=100){
+	    int i = r.nextInt(words.length);
 	    if (2*words[i].length()>width+length) {  //word is too big
 		limit++;
 		continue;
 	    }
-	    if(words[i].length()>length && words[i].length()<=width){ // word is longer than the height
-		y=r.nextInt(length);
-		if(!(fit(words[i],y,x,0,c))){
-		    //System.out.println("1");
-		    limit++;
-		    continue;
-		}
-		horizontal(words[i],y,x,c);
-	    } else if(words[i].length()>width && words[i].length()<=length){  // word is longer than the width
-		x=r.nextInt(width);
-		if(!(fit(words[i],y,x,1,c))){
-		    //System.out.println("2");
-		    limit++;
-		    continue;
-		}
-		vertical(words[i],y,x,c);
-	    } else { // word can be diagonal, horizontal, vertical
-		int a = r.nextInt(3);
-		if (a==0){
-		    y=r.nextInt(length);
-		    if(!(fit(words[i],y,x,0,c))){
-			//System.out.println("3");
-			limit++;
-			continue;
-		    }
-		    horizontal(words[i],y,x,c);
-		} else if (a==1){
-		    x=r.nextInt(width);
-		    if(!(fit(words[i],y,x,1,c))){
-			//System.out.println("4");
-			limit++;
-			continue;
-		    }
-		    vertical(words[i],y,x,c);
-		} else if (a==2){
-		    if(!(fit(words[i],y,x,2,c))){
-			//System.out.println("5");
-			limit++;
-			continue;
-		    }
-		    diagonal(words[i],y,x,c);
-		}
-		
+	    yx = locate(words[i]);
+	    dydx = direct(words[i],yx[0],yx[1]);
+	    if (dydx[0] == 0 && dydx[1] == 0){
+		limit++;
+		continue;
 	    }
+	    assign(words[i],yx[0],yx[1],dydx[0],dydx[1]);
 	    number++;
 	    limit++;
-	}
-	if(limit>=200){
-	    throw new RuntimeException("this while loop ran pretty long");
 	}
     }
     private int xRange(String s){
@@ -136,66 +95,41 @@ public class WordSearch {
 	return r.nextInt(length-s.length()+1);
     }
 
-    private boolean fit(String s, int y, int x, int d, int j){
-	if(j==0){
-	    y=length-y-1;
-	    x=length-x-1;
-	    if(d==0)
-		y=(y+1-length)*-1;
-	    if(d==1)
-		x=(x+1-length)*-1;
-	    j=-1;
+    private int[] direct(String s, int y, int x){
+	int dy = r.nextInt(3)-1;
+	int dx = r.nextInt(3)-1;
+	if (!(fit(s,y,x,dy,dx))){
+	    dy=0;
+	    dx=0;
 	}
+	int[] dydx = {dy,dx};
+	return dydx;
+    }
+
+    private int[] locate(String s){
+	int[] yx = new int[2];
+	yx[0]=yRange(s);
+	yx[1]=xRange(s);
+	return yx;
+    }
+
+    private boolean fit(String s, int y, int x, int dy, int dx) throws ArrayIndexOutOfBoundsException{
 	for(int i=0;i<s.length();i++){
-	    if(d==0){
-		/**if(grid[y][x+i*j]!=' '){
-		    System.out.println(s.charAt(i)+","+grid[y][x+i*j]+","+(grid[y][x+i*j]!=' ' && grid[y][x+i*j]!=s.charAt(i)));
-		    }**/
-		
-		if(grid[y][x+i*j]!=' ' && grid[y][x+i*j]!=s.charAt(i)){
+	    try{
+		if(grid[y+i*dy][x+i*dx]!=' ' && grid[y+i*dy][x+i*dx]!=s.charAt(i)){
 		    return false;
 		}
-	    } else if(d==1){
-		if(grid[y+i*j][x]!=' ' && grid[y+i*j][x]!=s.charAt(i)){
-		    return false;
-		}
-	    } else {
-		if(grid[y+i*j][x+i*j]!=' ' && grid[y+i*j][x+i*j]!=s.charAt(i)){
-		    return false;
-		}
-	    }//jj
+	    } catch(ArrayIndexOutOfBoundsException e) {
+		return false;
+	    }
 	}
 	return true;
     }
-	
-    public void vertical(String s, int rows, int cols, int j){
-	if(j==0){
-	    rows=length-rows-1;
-	    j=-1;
-	}
-	for(int i=0;i<s.length();i++){
-	    grid[rows+i*j][cols]=s.charAt(i);
-	}
-    }	
     
-    public void horizontal(String s, int rows, int cols,int j){
-	if(j==0){
-	    cols=length-cols-1;
-	    j=-1;
-	}
+    public void assign(String s, int rows, int cols, int dy, int dx){
+	System.out.println(s);
 	for(int i=0;i<s.length();i++){
-	    grid[rows][cols+i*j]=s.charAt(i);
-	}
-}
-    
-    public void diagonal(String s, int rows, int cols, int j){
-	if(j==0){
-	    rows=length-rows-1;
-	    cols=length-cols-1;
-	    j=-1;
-	}
-	for(int i=0;i<s.length();i++){
-	    grid[rows+i*j][cols+i*j]=s.charAt(i);
+	    grid[rows+i*dy][cols+i*dx]=s.charAt(i);
 	}
     }
     
@@ -221,10 +155,14 @@ public class WordSearch {
 	return s;
     }
 
-    public static void main(String[]df) {
-	WordSearch map =  new WordSearch(20,20);
-	map.add(10);
-	map.obfuscate();
-	System.out.println(map.toString());
+    public static void main(String[]args) {
+	if(args.length<2){
+	    System.out.println("Usage: java Driver rows cols [seed [answer]]");
+	} else {
+	    WordSearch map =  new WordSearch(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+	    map.add();
+	    //map.obfuscate();
+	    System.out.println(map.toString());
+    }
     }
 }
