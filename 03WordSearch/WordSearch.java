@@ -10,36 +10,52 @@ public class WordSearch {
     private char[] concatenated;
     private Random r;
     private int picked;
+    private String obfuscate = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public WordSearch(int rows, int cols) {
 	grid = new char[rows][cols];
 	length = rows;
 	width = cols;
 	r = new Random();
-	read();
 	clear();
-	
     }
 
-    public void read(){
+    public WordSearch(int rows, int cols, int seed){
+	this(rows,cols);
+	r = new Random(seed);
+    }
+	    
+    public void loadWordsFromFile(String fileName, boolean fillRandomLetters){
+	File text = new File(fileName);
+	Scanner scan = new Scanner(System.in);
 	try {
-	    File text = new File("list.txt");
-	    Scanner scan = new Scanner(text);
-	    int i=0;
-	    while(scan.hasNextLine()){
-		scan.nextLine();
-		i++;
-	    }
 	    scan = new Scanner(text);
-	    words = new String[i];
-	    i=0;
-	    while(scan.hasNextLine()){
-		words[i]=scan.nextLine().toUpperCase();
-		i++;
-	    }
-	} catch (FileNotFoundException e) {
+	} catch(FileNotFoundException e) {
 	    System.out.println("file not found");
 	}
+	int i=0;
+	while(scan.hasNextLine()){
+	    scan.nextLine();
+	    i++;
+	}
+	try {
+	    scan = new Scanner(text);
+	} catch(FileNotFoundException e) {
+	    System.out.println("file not found");
+	}
+	words = new String[i];
+	i=0;
+	while(scan.hasNextLine()){
+	    words[i]=scan.nextLine().toUpperCase();
+	    i++;
+	}
+	if(!(fillRandomLetters)){
+	    obfuscate = "_";
+	}
+    }
+
+    public void read(File text){
+
     }
 
     public void clear() {
@@ -48,6 +64,10 @@ public class WordSearch {
 		grid[i][j] = ' ';
 	    }
 	}
+    }
+
+    public void setSeed(long seed){
+	r = new Random(seed);
     }
 
     public void concatenate(String s) {
@@ -59,20 +79,19 @@ public class WordSearch {
     public void pick(){
 	int j = words.length-picked-1;
 	int i = r.nextInt(j+1);
-	System.out.println(words[i]);
 	String s = words[j];
 	words[j]=words[i];
 	words[i]=s;
 	picked++;
-    }
+	}
 
     public void add() {
 	int limit = 0;
 	int number = 0;
 	int[] yx = new int[2];
 	int[] dydx = new int[2];
+	int i = r.nextInt(words.length);
 	while(limit<=100){
-	    int i = r.nextInt(words.length);
 	    if (2*words[i].length()>width+length) {  //word is too big
 		limit++;
 		continue;
@@ -84,6 +103,8 @@ public class WordSearch {
 		continue;
 	    }
 	    assign(words[i],yx[0],yx[1],dydx[0],dydx[1]);
+	    pick();
+	    i = words.length - picked;
 	    number++;
 	    limit++;
 	}
@@ -134,11 +155,10 @@ public class WordSearch {
     }
     
     public void obfuscate(){
-	String abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	for (int i=0;i<length;i++) {
 	    for (int j=0;j<width;j++) {
 		if(grid[i][j]==' ')
-		    grid[i][j] = abc.charAt(r.nextInt(abc.length()));
+		    grid[i][j] = obfuscate.charAt(r.nextInt(obfuscate.length()));
 	    }
 	}
     }
@@ -156,13 +176,22 @@ public class WordSearch {
     }
 
     public static void main(String[]args) {
+	WordSearch map = new WordSearch(1,1);
 	if(args.length<2){
 	    System.out.println("Usage: java Driver rows cols [seed [answer]]");
+	    return;
+	} else if(args.length==2){
+	    map = new WordSearch(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 	} else {
-	    WordSearch map =  new WordSearch(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
-	    map.add();
-	    //map.obfuscate();
-	    System.out.println(map.toString());
-    }
+	    map = new WordSearch(Integer.parseInt(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
+	}
+	try {
+	    map.loadWordsFromFile("list.txt",Integer.parseInt(args[3])!=1);
+	} catch (ArrayIndexOutOfBoundsException e){
+	    map.loadWordsFromFile("list.txt",false);
+	}
+	map.add();
+	System.out.println(map.toString());
     }
 }
+
