@@ -10,6 +10,7 @@ public class WordSearch {
     private char[] concatenated;
     private Random r;
     private int picked;
+    private ArrayList<String> chosen;
     private String obfuscate = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public WordSearch(int rows, int cols) {
@@ -17,6 +18,7 @@ public class WordSearch {
 	length = rows;
 	width = cols;
 	r = new Random();
+	chosen = new ArrayList<String>();
 	clear();
     }
 
@@ -54,10 +56,6 @@ public class WordSearch {
 	}
     }
 
-    public void read(File text){
-
-    }
-
     public void clear() {
 	for (int i=0;i<length;i++) {
 	    for (int j=0;j<width;j++) {
@@ -76,13 +74,13 @@ public class WordSearch {
 	}
     }
     
-    public void pick(){
+    public int pick(){
 	int j = words.length-picked-1;
 	int i = r.nextInt(j+1);
 	String s = words[j];
-	words[j]=words[i];
 	words[i]=s;
 	picked++;
+	return words.length-picked;
 	}
 
     public void add() {
@@ -90,8 +88,9 @@ public class WordSearch {
 	int number = 0;
 	int[] yx = new int[2];
 	int[] dydx = new int[2];
-	int i = r.nextInt(words.length);
-	while(limit<=100){
+	int i = pick();
+	while(limit<=200){
+	    //i = r.nextInt(words.length);
 	    if (2*words[i].length()>width+length) {  //word is too big
 		limit++;
 		i = r.nextInt(words.length-picked);
@@ -105,8 +104,8 @@ public class WordSearch {
 		continue;
 	    }
 	    assign(words[i],yx[0],yx[1],dydx[0],dydx[1]);
-	    pick();
-	    i = words.length - picked;
+	    i = pick();
+	    //System.out.println(words[i]);
 	    number++;
 	    limit++;
 	}
@@ -150,7 +149,7 @@ public class WordSearch {
     }
     
     public void assign(String s, int rows, int cols, int dy, int dx){
-	System.out.println(s);
+        chosen.add(s);
 	for(int i=0;i<s.length();i++){
 	    grid[rows+i*dy][cols+i*dx]=s.charAt(i);
 	}
@@ -163,6 +162,24 @@ public class WordSearch {
 		    grid[i][j] = obfuscate.charAt(r.nextInt(obfuscate.length()));
 	    }
 	}
+    }
+
+    public String wordsInPuzzle(){
+	String str = "";
+	if(chosen.isEmpty()){
+	    return "";
+	}
+	for(int i=0;i<chosen.size();i++){
+	    for(int j=0;j<18-chosen.get(i).length();j++){
+		str+=" ";
+	    }
+	    str+=chosen.get(i);
+	    if((i+1)%4==0){
+		str+="\n";
+	    }
+	}
+	str+="\n";
+	return str;
     }
 
     public String toString() {
@@ -190,10 +207,11 @@ public class WordSearch {
 	try {
 	    map.loadWordsFromFile("list.txt",Integer.parseInt(args[3])!=1);
 	} catch (ArrayIndexOutOfBoundsException e){
-	    map.loadWordsFromFile("list.txt",false);
+	    map.loadWordsFromFile("list.txt",true);
 	}
 	map.add();
-	System.out.println(map.toString());
+	map.obfuscate();
+	System.out.println(map.wordsInPuzzle()+map.toString());
     }
 }
 
