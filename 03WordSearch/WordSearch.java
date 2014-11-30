@@ -94,12 +94,14 @@ public class WordSearch {
 	while(limit<=100){
 	    if (2*words[i].length()>width+length) {  //word is too big
 		limit++;
+		i = r.nextInt(words.length-picked);
 		continue;
 	    }
 	    yx = locate(words[i]);
 	    dydx = direct(words[i],yx[0],yx[1]);
 	    if (dydx[0] == 0 && dydx[1] == 0){
 		limit++;
+		i = r.nextInt(words.length-picked);
 		continue;
 	    }
 	    assign(words[i],yx[0],yx[1],dydx[0],dydx[1]);
