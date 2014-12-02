@@ -1,6 +1,6 @@
 public class SuperArray {
     public Object[] array;
-    private int length=0;
+    public int length;
 
     public SuperArray() {
 	this(10);
@@ -8,6 +8,7 @@ public class SuperArray {
 
     public SuperArray(int size) {
 	array = new Object[size];
+	length = 0;
     }
     
     public String toString() {
@@ -88,6 +89,10 @@ public class SuperArray {
 	resize(array.length-1);
 	length--;
 	return o;
+    }
+
+    public int getLength(){
+	return length;
     }
 
     public static void main(String[]adads){
