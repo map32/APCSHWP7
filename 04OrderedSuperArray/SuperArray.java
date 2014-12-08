@@ -81,16 +81,13 @@ public class SuperArray {
 	Object temp;
 	for(int i=1;i<length;i++){
 	    temp = array[i];
-	    int j = i-1;
-	    while(j>=0){
+	    for(int j=i-1;j>=0;j--){
 		if(array[j].toString().compareTo(temp.toString())>0){
 		    set(j+1,array[j]);
 		    set(j,temp);
 		}
-		j--;
 	    }
-	}
-	
+	}	
     }
 
     public void selectionSort(){
