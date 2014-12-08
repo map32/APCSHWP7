@@ -8,22 +8,14 @@ public class OrderedSuperArray extends SuperArray {
 	array = new String[size];
     }
 
-    public void add(Object e) {
-	add(e.toString());
-    }
-
     public void add(String e) {
 	for(int i=0;i<getLength();i++){
 	    if(((String)array[i]).compareTo(e)>=0){
-		super.add(i,e);
+		add(i,e);
 		return;
 	    }
 	}
-	super.add(getLength(),e);
-    }
-
-    public void add(int index, String o){
-	add(o);
+	add(getLength(),e);
     }
 
     public String set(int index, String o){
@@ -36,46 +28,21 @@ public class OrderedSuperArray extends SuperArray {
 	return o;
     }
 
-    public void badInsertionSort(){
-        OrderedSuperArray c = new OrderedSuperArray();
-        while( this.size() > 0){ 
-            c.add(this.remove(0));
-        }
-        while(c.size() > 0){
-            this.add(c.remove(0));
-        }
-    }
-
     public static void main(String[]adads){
 	OrderedSuperArray L = new OrderedSuperArray();
-
-	//badinsertionsort
-	for(int i=0;i<10000;i++){
-	    L.add(i);
-	}
-	long start = System.nanoTime();
-	L.badInsertionSort();
-	long end = System.nanoTime();
-	System.out.println((end-start)/1000000000.);
-
-	//insertionsort
-	L = new OrderedSuperArray();
-	for(int i=0;i<10000;i++){
-	    L.add(Integer.toString(i));
-	}
-	start = System.nanoTime();
-	L.insertionSort();
-	end = System.nanoTime();
-	System.out.println((end-start)/1000000000.);
-
-	//selectionsort
-	L = new OrderedSuperArray();
-	for(int i=0;i<10000;i++){
-	    L.add(Integer.toString(i));
-	}
-        start = System.nanoTime();
-	L.selectionSort();
-	end = System.nanoTime();
-	System.out.println((end-start)/1000000000.);
+	L.add("a");
+	//L.add("b");
+	L.add("c");
+	L.add("d");
+	L.add("e");
+	L.add("f");
+	System.out.println(L.toString());
+	System.out.println(L.get(3));
+	L.add("b");
+	System.out.println(L.toString());
+	System.out.println(L.remove(1));
+	System.out.println(L.toString());
+	L.set(2,"b");
+	System.out.println(L.toString());
     }
 }
