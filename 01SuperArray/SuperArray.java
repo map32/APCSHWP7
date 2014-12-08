@@ -84,8 +84,8 @@ public class SuperArray {
 	    int j = i-1;
 	    while(j>=0){
 		if(array[j].toString().compareTo(temp)>0){
+		    set(j+1,array[j]);
 		    set(j,temp);
-		    set(i,array[j]);
 		}
 		j--;
 	    }
@@ -93,6 +93,16 @@ public class SuperArray {
 	
     }
     
+    /*public void badInsertionSort(){
+        SuperArray c = new SuperArray();
+        while( this.size() > 0){ 
+            c.add(this.remove(0));
+        }
+        while(c.size() > 0){
+            this.add(c.remove(0));
+        }
+	} */
+
     public void selectionSort(){
 	
     }
@@ -121,7 +131,10 @@ public class SuperArray {
 	    L.add(Integer.toString(i));
 	}
 	System.out.println(L.toString());
+	long start = System.nanoTime();
 	L.insertionSort();
+	long end = System.nanoTime();
 	System.out.println(L.toString());
+	System.out.println(end-start);
     }
 }
