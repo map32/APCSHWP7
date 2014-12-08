@@ -78,12 +78,12 @@ public class SuperArray {
     }
 
     public void insertionSort(){
-	String temp;
+	Object temp;
 	for(int i=1;i<length;i++){
-	    temp = (String)array[i];
+	    temp = array[i];
 	    int j = i-1;
 	    while(j>=0){
-		if(array[j].toString().compareTo(temp)>0){
+		if(array[j].toString().compareTo(temp.toString())>0){
 		    set(j+1,array[j]);
 		    set(j,temp);
 		}
@@ -104,7 +104,17 @@ public class SuperArray {
 	} */
 
     public void selectionSort(){
-	
+	for(int i=0;i<length;i++){
+	    int min=i;
+	    for(int j=i;j<length;j++){
+		if(array[min].toString().compareTo(array[j].toString())>0){
+		    min=j;
+		}
+	    }
+	    Object mintemp = array[min];
+	    set(min,array[i]);
+	    set(i,mintemp);
+	}
     }
 
     public Object remove(int index){
@@ -127,14 +137,24 @@ public class SuperArray {
 
     public static void main(String[]adads){
 	SuperArray L = new SuperArray();
-	for(int i=0;i<100;i++){
+	for(int i=0;i<10000;i++){
 	    L.add(Integer.toString(i));
 	}
-	System.out.println(L.toString());
 	long start = System.nanoTime();
 	L.insertionSort();
 	long end = System.nanoTime();
-	System.out.println(L.toString());
-	System.out.println(end-start);
+	//System.out.println(L.toString());
+	System.out.println((end-start)/1000000000.);
+
+	L = new SuperArray();
+	for(int i=0;i<10000;i++){
+	    L.add(Integer.toString(i));
+	}
+	//System.out.println(L.toString());
+        start = System.nanoTime();
+	L.selectionSort();
+	end = System.nanoTime();
+	//System.out.println(L.toString());
+	System.out.println((end-start)/1000000000.);
     }
 }
