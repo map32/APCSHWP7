@@ -1,0 +1,40 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GuiCtoF extends JFrame implements ActionListener{
+    private Container pane;
+    private JButton convert;
+    private JLabel c,f;
+    private JTextField ct,ft;
+    private Container texts;
+    private Container buttons;
+    private JCheckBox x;
+
+    public GuiCtoF() {
+	this.setTitle("My first GUI");
+	this.setSize(600,400);
+	this.setLocation(100,100);
+	this.setDefaultCloseOperation(EXIT_ON_CLOSE);	
+
+	pane = this.getContentPane();
+	pane.setLayout(new GridLayout(2,1));
+	
+	c = new JLabel("C: ",null,JLabel.CENTER);
+	f = new JLabel("F: ",null,JLabel.CENTER);
+	ct = new JTextField(20);
+	ft = new JTextField(20);
+	convert = new JButton("Convert");
+	
+	pane.add(c);
+	pane.add(f);
+	pane.add(ct);
+	pane.add(ft);
+	pane.add(convert);
+    }
+
+    public static void main(String[] args) {
+	GuiCtoF window = new GuiCtoF();
+	window.setVisible(true);
+    }
+}
