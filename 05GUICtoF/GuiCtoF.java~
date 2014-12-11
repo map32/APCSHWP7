@@ -7,8 +7,8 @@ public class GuiCtoF extends JFrame implements ActionListener{
     private JButton convert;
     private JLabel c,f;
     private JTextField ct,ft;
-    private Container texts;
-    private Container buttons;
+    private Container containerf;
+    private Container containerc;
     private JCheckBox x;
 
     public GuiCtoF() {
@@ -22,15 +22,26 @@ public class GuiCtoF extends JFrame implements ActionListener{
 	
 	c = new JLabel("C: ",null,JLabel.CENTER);
 	f = new JLabel("F: ",null,JLabel.CENTER);
-	ct = new JTextField(20);
-	ft = new JTextField(20);
+	ct = new JTextField(10);
+	ft = new JTextField(10);
 	convert = new JButton("Convert");
-	
-	pane.add(c);
-	pane.add(f);
-	pane.add(ct);
-	pane.add(ft);
+
+	containerf = new Container();
+	containerf.setLayout(new FlowLayout());
+	containerf.add(f);
+	containerf.add(ft);
+
+	containerc = new Container();
+	containerc.setLayout(new FlowLayout());
+	containerc.add(c);
+	containerc.add(ct);
+
+	pane.add(containerc);
+	pane.add(containerf);
 	pane.add(convert);
+    }
+
+    public void actionPerformed(ActionEvent e){
     }
 
     public static void main(String[] args) {
