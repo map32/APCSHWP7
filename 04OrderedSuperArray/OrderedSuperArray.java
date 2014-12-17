@@ -66,6 +66,7 @@ public class OrderedSuperArray extends SuperArray {
 	start = System.nanoTime();
 	L.insertionSort();
 	end = System.nanoTime();
+	System.out.println(L.toString());
 	System.out.println((end-start)/1000000000.);
 
 	//selectionsort

@@ -82,10 +82,9 @@ public class SuperArray {
 	for(int i=1;i<length;i++){
 	    temp = array[i];
 	    for(int j=i-1;j>=0;j--){
-		if(array[j].toString().compareTo(array[j+1].toString())>0){
+		if(array[j].toString().compareTo(temp.toString())>0){
 		    set(j+1,array[j]);
 		    set(j,temp);
-		    temp = array[j];
 		}
 	    }
 	}	

@@ -5,24 +5,7 @@ public class Sorts {
 	for(int i=0;i<10;i++){
 	    c[i]=10-i;
 	}
-	System.out.println(toString(c));
 	bubble(c);
-	System.out.println(toString(c));
-
-	c = new int[10];
-	for(int i=0;i<10;i++){
-	    c[i]=10-i;
-	}
-	System.out.println(toString(c));
-	insertion(c);
-	System.out.println(toString(c));
-
-	c = new int[10];
-	for(int i=0;i<10;i++){
-	    c[i]=10-i;
-	}
-	System.out.println(toString(c));
-	selection(c);
 	System.out.println(toString(c));
     }
 
@@ -30,8 +13,8 @@ public class Sorts {
     public static void bubble(int[] c){
 	int temp;
 	for(int i=0;i<c.length-1;i++){
-	    for(int j=0;j<c.length-1-i;j++){
-		temp = c[j];
+	    temp = c[i];
+	    for(int j=i;j<c.length-1;j++){
 		if(c[j]>c[j+1]){
 		    c[j]=c[j+1];
 		    c[j+1]=temp;
@@ -45,7 +28,7 @@ public class Sorts {
 	for(int i=1;i<c.length;i++){
 	    temp = c[i];
 	    for(int j=i-1;j>=0;j--){
-		if(c[j]>c[j+1]){
+		if(c[j]>c[i]){
 		    c[j+1]=c[j];
 		    c[j]=temp;
 		}
