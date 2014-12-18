@@ -1,29 +1,40 @@
 public class Sorts {
 
     public static void main(String[] args){
-	int[] c = new int[10];
-	for(int i=0;i<10;i++){
-	    c[i]=10-i;
+	int[] c = new int[50000];
+	long start;
+	long end;
+	for(int i=0;i<50000;i++){
+	    c[i]=50000-i;
 	}
-	System.out.println(toString(c));
+	//System.out.println(toString(c));
+	start = System.nanoTime();
 	bubble(c);
-	System.out.println(toString(c));
+	end = System.nanoTime();
+	//System.out.println(toString(c));
+	System.out.println((end-start)/1000000000.);
 
-	c = new int[10];
-	for(int i=0;i<10;i++){
-	    c[i]=10-i;
+	c = new int[50000];
+	for(int i=0;i<50000;i++){
+	    c[i]=50000-i;
 	}
-	System.out.println(toString(c));
+	//System.out.println(toString(c));
+	start = System.nanoTime();
 	insertion(c);
-	System.out.println(toString(c));
+	end = System.nanoTime();
+	//System.out.println(toString(c));
+	System.out.println((end-start)/1000000000.);
 
-	c = new int[10];
-	for(int i=0;i<10;i++){
-	    c[i]=10-i;
+	c = new int[50000];
+	for(int i=0;i<50000;i++){
+	    c[i]=50000-i;
 	}
-	System.out.println(toString(c));
+	//System.out.println(toString(c));
+	start = System.nanoTime();
 	selection(c);
-	System.out.println(toString(c));
+	end = System.nanoTime();
+	//System.out.println(toString(c));
+	System.out.println((end-start)/1000000000.);
     }
 
 
@@ -66,7 +77,29 @@ public class Sorts {
 	    c[i]=mintemp;
 	}
     }
-    
+
+    public static void radix(int[] c){
+	ArrayList<Integer>[] storage = new ArrayList<Integer>[c.length];
+	ArrayList<Integer> list = new ArrayList<Integer>;
+	int max = 0;
+	for(int i=0;i<c.length;i++){
+	    list.add(c[i]);
+	    if(c[max]<c[i]){
+		max=i;
+	    }
+	}
+	for(int i=0;i<c.length;i++){
+	    storage[c[i]%10].add(c[i]);
+	}
+	list.clear();
+	for(int i=0;i<c.length;i++){
+	    list.addAll(storage[i]);
+	}
+    }
+
+    public static int digit(){
+    }
+
     public static String toString(int[] c) {
 	String str = "[ ";
 	for(int i=0;i<c.length;i++) {
