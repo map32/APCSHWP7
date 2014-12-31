@@ -1,6 +1,7 @@
 public class Obstacles{
   PVector location;
   PVector velocity;
+  int vel;
   //PVector acc;
   int rangeX;
   int rangeY;
@@ -8,12 +9,12 @@ public class Obstacles{
   
   public Obstacles(){
     location = new PVector((int)random(width),(int)random(height),-15000);
-    velocity = new PVector(0,0,150);
+    velocity = new PVector(0,0,vel);
   }
   
   public Obstacles(int x, int y, int z){
     location = new PVector(x,y,z);
-    velocity = new PVector(0,0,150);
+    velocity = new PVector(0,0,vel);
   }
   
   public void move(float planeX, float planeY){
@@ -235,7 +236,7 @@ public class Invincible extends Obstacles {
   }
   
   public void paint(){
-    Fill(color(hue,255,255,192));
+    fill(color(hue,255,255,192));
     hue += 20;
     sphere(100);
   }
