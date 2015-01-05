@@ -13,14 +13,14 @@ public class Plane {
   }
   public void trace(int speed){
     vel.set(mouseX-location.x,mouseY-location.y);
-    vel.mult(0.1);
+    vel.mult(0.15);
     location.add(vel);
     if(location.x>width-50){
       location.x=width-50;
     } else if(location.x<50){
       location.x=50;
     }
-    fuel -= speed*0.1;
+    fuel -= speed*0.5;
   }
   public void fire(){
   }

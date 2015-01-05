@@ -1,18 +1,17 @@
-public class Obstacles{
+public abstract class Obstacles extends Rendered{
   PVector location;
   PVector velocity;
-  int vel;
   //PVector acc;
   int rangeX;
   int rangeY;
   boolean destructible;
   
-  public Obstacles(){
+  public Obstacles(int vel){
     location = new PVector((int)random(width),(int)random(height),-15000);
     velocity = new PVector(0,0,vel);
   }
   
-  public Obstacles(int x, int y, int z){
+  public Obstacles(int x, int y, int z, int vel){
     location = new PVector(x,y,z);
     velocity = new PVector(0,0,vel);
   }
@@ -25,71 +24,6 @@ public class Obstacles{
     location.add(velocity);
   }
   
-  public void cube(int x, int y, int z, PImage i){
-    pushMatrix();
-    make(x,y,i);
-    translate(0,0,-z);
-    make(x,y,i);
-    popMatrix();
-    pushMatrix();
-    rotateY(radians(90));
-    make(z,y,i);
-    translate(0,0,z);
-    make(z,y,i);
-    popMatrix();
-    pushMatrix();
-    rotateX(radians(-90));
-    make(x,z,i);
-    translate(0,0,y);
-    make(x,z,i);
-    popMatrix();
-  }
-  
-  public void cube(int x, int y, int z, color i){
-    pushMatrix();
-    make(x,y,i);
-    translate(0,0,-z);
-    make(x,y,i);
-    popMatrix();
-    pushMatrix();
-    rotateY(radians(90));
-    make(z,y,i);
-    translate(0,0,z);
-    make(z,y,i);
-    popMatrix();
-    pushMatrix();
-    rotateX(radians(-90));
-    make(x,z,i);
-    translate(0,0,y);
-    make(x,z,i);
-    popMatrix();
-  }
-  
-  public void make(int x, int y, PImage i){
-    beginShape(QUADS);
-    texture(i);
-    vertex(0,0,0,0,0);
-    vertex(0,y,0,0,1);
-    vertex(x,y,0,1,1);
-    vertex(x,0,0,1,0);
-    endShape();
-  }
-  
-  public void make(int x, int y, color c){
-    beginShape(QUADS);
-    fill(c);
-    vertex(0,0,0);
-    vertex(0,y,0);
-    vertex(x,y,0);
-    vertex(x,0,0);
-    endShape();
-  }
-  
-  public void paint(){
-  }
-  
-  public void make(){
-  }
   
   //public boolean isHit(Plane plane){
   //}
@@ -100,8 +34,8 @@ public class Pillar extends Obstacles{
   PImage img;
   color c;
   
-  public Pillar(){
-    super(0,(int)random(height),-15000);
+  public Pillar(int v){
+    super(0,(int)random(height),-15000,v);
     c = color((int)random(50000),255,255,200);
     //axis = (int)random(2);
     axis = (int)random(2);
@@ -156,11 +90,10 @@ public class Pillar extends Obstacles{
 }
 
 public class Missiles extends Obstacles{
-  int acc = 2;
+  int acc = 5;
   int angle = 0;
-  public Missiles(){
-    super();
-    velocity.z = 0;
+  public Missiles(int v){
+    super(v);
   }
   
   public void move(float planeX, float planeY){
@@ -195,8 +128,8 @@ public class Health extends Obstacles {
   int hp;
   color red = color(0,220,255,192);
   
-  public Health(int h){
-    super();
+  public Health(int h, int v){
+    super(v);
     hp = h;
   }
   
@@ -213,8 +146,8 @@ public class Health extends Obstacles {
 public class Fuel extends Obstacles {
   int fuel;
   
-  public Fuel(){
-    super();
+  public Fuel(int v){
+    super(v);
   }
   
   public void paint(){
@@ -231,8 +164,8 @@ public class Fuel extends Obstacles {
   
 public class Invincible extends Obstacles {
   int hue = 0;
-  public Invincible(){
-    super();
+  public Invincible(int v){
+    super(v);
   }
   
   public void paint(){
